@@ -15,9 +15,9 @@ Application configuration is done via environment variables.
 * `PIPETEST_PIEPEDRIVE_API_KEY` - API key for Pipedrive API (should match `PIPETEST_PIEPEDRIVE_COMPANY_NAME`) 
 
 ### Optional environment variables (have default value)
-* `PIPETEST_QUERIED_USERS` - Comma separated list of GitHub users which will be queried by the app. (ex `PIPETEST_QUERIED_USERS=Kiedis,Flea,Smith,Frusciante`) Default value set to **antomer**
-* `PIPETEST_QUERYING_INTERVAL` - Interval in *minutes* for how often user gists will be fetched from the GitHub. Default value set to **30**
-<em>!NB As GitHub API has a limit for unauthorized requests. while configuring application it should be considered that amount of queried users * 60 / querying interval should not be more than 60, otherwise, requests will start to fail </em>
+* `PIPETEST_QUERIED_USERS` - Comma separated list of GitHub users which will be queried by the app. (ex `PIPETEST_QUERIED_USERS=Kiedis,Flea,Smith,Frusciante`) <br>Default value set to **antomer**
+* `PIPETEST_QUERYING_INTERVAL` - Interval in *minutes* for how often user gists will be fetched from the GitHub. <br>Default value set to **30**
+<em><br><br>!NB As GitHub API has a limit for unauthorized requests. while configuring application it should be considered that amount of queried users * 60 / querying interval should not be more than 60, otherwise, requests will start to fail </em>
 
 ## Database
 The application is using a local simple database (TinyDB) to store sessions and fetched data. It has two tables: `users`, and `sessions`. Users table stores GitHub username with a list of IDs of publicly available gists. Session table stores unique session_id from the session cookie, and lastly shown gists for a particular session.
