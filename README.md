@@ -24,9 +24,16 @@ The application is using a local simple database (TinyDB) to store sessions and 
 In order to avoid data duplication in Pipedrive CRM (ex multiple organizations for same user), it is recommended to mount `/db/` folder to the container, otherwise on each run DB will be recreated from scratch.
 
 ## Run application
-Run following command from projects root directory 
+### Get docker image image
+* Build locally, see step "Build docker image".  
+* Pull from remote repo
 
-    docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it pipetest:latest
+    
+    docker pull antomer/pipetest
+
+Run Run docker image. Execute command from projects root directory 
+
+    docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it antomer/pipetest
 
 ### Access locally run application
     curl localhost:8080/getAllScannedUsers
