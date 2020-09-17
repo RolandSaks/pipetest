@@ -39,29 +39,24 @@ Run Run docker image. Execute command from projects root directory
     curl localhost:8080/getAllScannedUsers
 ## HTTP endpoints
 #### Health Endpoint
-**Path:** /health<br>
+**Path:** `/health`<br>
 **Allowed methods:** GET<br>
-**Description:** returns status of application<br>
+**Description:** Returns health status of application<br>
 
 #### Get all scanned users
-**Path:** /getAllScannedUsers<br>
+**Path:** `/getAllScannedUsers`<br>
 **Allowed methods:** GET<br>
-**Description:** returns all users ever scanned by the app.<br>
+**Description:** Returns all users ever scanned by the app.<br>
 
-#### Get all scanned users
-**Path:** /getAllScannedUsers<br>
+#### Get currently scanned users
+**Path:** `/getCurrentlyScannedUsers`<br>
 **Allowed methods:** GET<br>
-**Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
+**Description:** Returns list of users currently being scanned. May differ from `/getAllScannedUsers` response if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
 #### Get new gists
-**Path:** /getGists<br>
+**Path:** `/getGists`<br>
 **Allowed methods:** GET<br>
-**Description:** returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
-
-#### Get all scanned users
-**Path:** /getAllScannedUsers<br>
-**Allowed methods:** GET<br>
-**Description:** returns list of users currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
+**Description:** Returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
 
 ## Possible improvements
 * Remove expired sessions from DB
