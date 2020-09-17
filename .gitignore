@@ -131,3 +131,6 @@ dmypy.json
 #Tiny DB database folder
 db/
 db.json
+
+# Pycharm
+.idea

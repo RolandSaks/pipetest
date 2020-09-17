@@ -8,7 +8,7 @@ In order to build a docker image run the following command from the projects roo
     docker build -t pipetest .
 
 ## Configuration
-Application configuration is done via environment variables. 
+Application configuration is done via environment variables. Application is written in python using Flask framework.
 
 ### Mandatory environment variable 
 * `PIPETEST_PIEPEDRIVE_COMPANY_NAME` - Comapny name in Pipedrive. Default value is set to **antonsawesomecompany**
@@ -29,6 +29,8 @@ Run following command from projects root directory
 
     docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it pipetest:latest
 
+### Access locally run application
+    curl localhost:8080/getAllScannedUsers
 ## HTTP endpoints
 #### Health Endpoint
 **Path:** /health<br>
