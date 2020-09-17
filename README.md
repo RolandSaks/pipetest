@@ -45,7 +45,7 @@ Run following command from projects root directory
 **Allowed methods:** GET<br>
 **Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
-# Get new gists
+## Get new gists
 **Path:** /getGists<br>
 **Allowed methods:** GET<br>
 **Description:** returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
