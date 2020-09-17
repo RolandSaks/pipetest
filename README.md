@@ -30,27 +30,27 @@ Run following command from projects root directory
     docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it pipetest:latest
 
 ## HTTP endpoints
-### Health Endpoint
+#### Health Endpoint
 **Path:** /health<br>
 **Allowed methods:** GET<br>
 **Description:** returns status of application<br>
 
-### Get all scanned users
+#### Get all scanned users
 **Path:** /getAllScannedUsers<br>
 **Allowed methods:** GET<br>
 **Description:** returns all users ever scanned by the app.<br>
 
-### Get all scanned users
+#### Get all scanned users
 **Path:** /getAllScannedUsers<br>
 **Allowed methods:** GET<br>
 **Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
-## Get new gists
+#### Get new gists
 **Path:** /getGists<br>
 **Allowed methods:** GET<br>
 **Description:** returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
 
-### Get all scanned users
+#### Get all scanned users
 **Path:** /getAllScannedUsers<br>
 **Allowed methods:** GET<br>
 **Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
