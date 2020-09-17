@@ -1,6 +1,6 @@
 # PIPETEST APP
 ## Description 
-The application is periodically checking for Github users publically available gists, and creates Deal in Pipedrive CRM for each gist.
+The application is periodically checking for Github users publicly available gists, and creates Deal in Pipedrive CRM for each gist. Application is written in python using Flask framework.
 
 ## Build docker image
 In order to build a docker image run the following command from the projects root directory
@@ -8,8 +8,7 @@ In order to build a docker image run the following command from the projects roo
     docker build -t pipetest .
 
 ## Configuration
-Application configuration is done via environment variables. Application is written in python using Flask framework.
-
+Application configuration is done via environment variables. 
 ### Mandatory environment variable 
 * `PIPETEST_PIEPEDRIVE_COMPANY_NAME` - Comapny name in Pipedrive. Default value is set to **antonsawesomecompany**
 * `PIPETEST_PIEPEDRIVE_API_KEY` - API key for Pipedrive API (should match `PIPETEST_PIEPEDRIVE_COMPANY_NAME`) 
