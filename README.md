@@ -21,6 +21,7 @@ Application configuration is done via environment variables.
 
 ## Database
 The application is using a local simple database (TinyDB) to store sessions and fetched data. It has two tables: `users`, and `sessions`. Users table stores GitHub username with a list of IDs of publicly available gists. Session table stores unique session_id from the session cookie, and lastly shown gists for a particular session.
+<br><br> 
 In order to avoid data duplication in Pipedrive CRM (ex multiple organizations for same user), it is recommended to mount `/db/` folder to the container, otherwise on each run DB will be recreated from scratch.
 
 ## Run application
@@ -30,33 +31,31 @@ Run following command from projects root directory
 
 ## HTTP endpoints
 ### Health Endpoint
-**Path:** /health
-**Allowed methods:** GET
-**Description:** returns status of application
+**Path:** /health<br>
+**Allowed methods:** GET<br>
+**Description:** returns status of application<br>
 
 ### Get all scanned users
-**Path:** /getAllScannedUsers
-**Allowed methods:** GET
-**Description:** returns all users ever scanned by the app.
+**Path:** /getAllScannedUsers<br>
+**Allowed methods:** GET<br>
+**Description:** returns all users ever scanned by the app.<br>
 
 ### Get all scanned users
-**Path:** /getAllScannedUsers
-**Allowed methods:** GET
-**Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.
+**Path:** /getAllScannedUsers<br>
+**Allowed methods:** GET<br>
+**Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
 # Get new gists
-**Path:** /getGists
-**Allowed methods:** GET
-**Description:** returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.
+**Path:** /getGists<br>
+**Allowed methods:** GET<br>
+**Description:** returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
 
 ### Get all scanned users
-* Path: /getAllScannedUsers
-* Allowed methods: GET
-* Description: returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.
-
+**Path:** /getAllScannedUsers<br>
+**Allowed methods:** GET<br>
+**Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
 ## Possible improvements
-
 * Remove expired sessions from DB
 * Check if an organization or deal in Pipedrive exists before creating.
 * And many more..
