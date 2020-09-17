@@ -26,9 +26,37 @@ In order to avoid data duplication in Pipedrive CRM (ex multiple organizations f
 ## Run application
 Run following command from projects root directory 
 
-    docker -v ./:/db run -e PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8088:8080 -it pipetest:latest
+    docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it pipetest:latest
+
+## HTTP endpoints
+### Health Endpoint
+**Path:** /health
+**Allowed methods:** GET
+**Description:** returns status of application
+
+### Get all scanned users
+**Path:** /getAllScannedUsers
+**Allowed methods:** GET
+**Description:** returns all users ever scanned by the app.
+
+### Get all scanned users
+**Path:** /getAllScannedUsers
+**Allowed methods:** GET
+**Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.
+
+# Get new gists
+**Path:** /getGists
+**Allowed methods:** GET
+**Description:** returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.
+
+### Get all scanned users
+* Path: /getAllScannedUsers
+* Allowed methods: GET
+* Description: returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.
+
 
 ## Possible improvements
 
 * Remove expired sessions from DB
 * Check if an organization or deal in Pipedrive exists before creating.
+* And many more..

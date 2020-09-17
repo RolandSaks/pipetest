@@ -47,7 +47,7 @@ def get_currently_scanned_users():
     return resp
 
 
-# Returns all users ever scanned by the app.
+# Returns list of new gists for particular session
 @app.route("/getGists", methods=["GET"])
 def get_gists():
     all_users_data = users_table.search(User.username.matches(".*"))
