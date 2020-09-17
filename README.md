@@ -53,7 +53,7 @@ Run following command from projects root directory
 #### Get all scanned users
 **Path:** /getAllScannedUsers<br>
 **Allowed methods:** GET<br>
-**Description:** returns list of currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
+**Description:** returns list of users currently being scanned, may be different, if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
 ## Possible improvements
 * Remove expired sessions from DB
