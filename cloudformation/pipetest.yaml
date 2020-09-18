@@ -1,4 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Description: |
+  AWS CloudFormation template provisions VPC, EC2, ECS, ALB, EFS resouces for running antomer/pipetest docker image as ECS service. All resources are AWS Free tier eligable.
+
 Parameters:
   EnvironmentName:
     Description: An environment name that is prefixed to resource names
@@ -235,9 +238,9 @@ Resources:
       GroupDescription: ECS Security Group
       VpcId: !Ref VPC
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
+        - IpProtocol: -1
+          FromPort: '0'
+          ToPort: '65535'
           CidrIp: !Ref VpcCIDR
 
   ECSTaskDefinition:
@@ -412,8 +415,8 @@ Resources:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       VPCZoneIdentifier:
-        - !Ref PublicSubnetA
-        - !Ref PublicSubnetB
+        - !Ref PrivateSubnetA
+        - !Ref PrivateSubnetB
       LaunchConfigurationName: !Ref EC2LauncConfiguration
       MinSize: 1
       MaxSize: !Ref MaxSize
