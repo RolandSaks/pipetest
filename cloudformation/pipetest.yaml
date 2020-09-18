@@ -366,8 +366,8 @@ Resources:
       - Key: idle_timeout.timeout_seconds
         Value: 30
       Subnets:
-        - !Ref PrivateSubnetA
-        - !Ref PrivateSubnetB
+        - !Ref PublicSubnetA
+        - !Ref PublicSubnetB
       SecurityGroups:
         - !Ref EcsSecurityGroup
 
