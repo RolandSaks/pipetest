@@ -61,4 +61,5 @@ Run Run docker image. Execute command from projects root directory
 ## Possible improvements
 * Remove expired sessions from DB
 * Check if an organization or deal in Pipedrive exists before creating.
+* HTTPS
 * And many more..
