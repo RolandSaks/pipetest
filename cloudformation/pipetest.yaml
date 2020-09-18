@@ -1,9 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
-  KeyName:
-    Type: AWS::EC2::KeyPair::KeyName
-    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
-
   EnvironmentName:
     Description: An environment name that is prefixed to resource names
     Type: String
@@ -367,8 +363,8 @@ Resources:
       - Key: idle_timeout.timeout_seconds
         Value: 30
       Subnets:
-        - !Ref PublicSubnetA
-        - !Ref PublicSubnetB
+        - !Ref PrivateSubnetA
+        - !Ref PrivateSubnetB
       SecurityGroups:
         - !Ref EcsSecurityGroup
 
@@ -434,7 +430,6 @@ Resources:
         - !Ref EcsSecurityGroup
       InstanceType: t2.micro
       IamInstanceProfile: !Ref EC2InstanceProfile
-      KeyName: !Ref KeyName
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
