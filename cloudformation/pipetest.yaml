@@ -283,7 +283,7 @@ Resources:
     DependsOn: ALBListener
     Properties:
       Cluster: !Ref ECSCluster
-      DesiredCount: 1
+      DesiredCount: !Ref DesiredCapacity
       LoadBalancers:
       - ContainerName: pipetest
         ContainerPort: 8080
@@ -432,25 +432,49 @@ Resources:
       ImageId: !FindInMap [AWSRegionToAMI, !Ref AWS::Region, AMIID]
       SecurityGroups:
         - !Ref EcsSecurityGroup
-      InstanceType: t3.micro
+      InstanceType: t2.micro
       IamInstanceProfile: !Ref EC2InstanceProfile
       KeyName: !Ref KeyName
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
           #Docker and ECS
           sudo yum update -y
-          sudo amazon-linux-extras install -y docker
-          sudo amazon-linux-extras install -y ecs
+          sudo amazon-linux-extras install -y docker ecs
+          sudo cat <<'EOF' >> /etc/ecs/ecs.config
+          ECS_CLUSTER=${ECSCluster}
+          EOF
+          # override ecs systemd conf. remove cloud-final.service dependancy https://github.com/aws/amazon-ecs-agent/issues/1707
+          sudo cat << 'EOF' > /usr/lib/systemd/system/ecs.service
+          [Unit]
+          Description=Amazon Elastic Container Service - container agent
+          Documentation=https://aws.amazon.com/documentation/ecs/
+          Requires=docker.service
+          After=docker.service
+
+          [Service]
+          Type=simple
+          Restart=on-failure
+          RestartSec=10s
+          EnvironmentFile=-/etc/ecs/ecs.config
+          ExecStartPre=/usr/libexec/amazon-ecs-init pre-start
+          ExecStart=/usr/libexec/amazon-ecs-init start
+          ExecStop=/usr/libexec/amazon-ecs-init stop
+          ExecStopPost=/usr/libexec/amazon-ecs-init post-stop
+
+          [Install]
+          WantedBy=multi-user.target
+          EOF
+
           sudo systemctl enable --now --no-block ecs.service
           sudo service docker start
+          sudo service cloud-final start
           sudo service ecs start
 
           # EFS
           sudo yum install -y amazon-efs-utils
           sudo mkdir /efs
-          sudo mount -t efs ${EFSId}:/ /efs
+          sudo mount -t efs ${EFS}:/ /efs
           sudo chmod 777 /efs
 
   EC2Role:
@@ -477,10 +501,12 @@ Resources:
               - ecs:Poll
               - ecs:RegisterContainerInstance
               - ecs:StartTelemetrySession
+              - ecs:UpdateContainerInstancesState
               - ecs:Submit*
               - logs:CreateLogStream
               - logs:PutLogEvents
               - logs:CreateLogGroup
+              - ssm:UpdateInstanceInformation
             Resource: '*'
 
   EC2InstanceProfile:
