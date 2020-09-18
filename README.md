@@ -41,7 +41,7 @@ Run Run docker image. Execute command from projects root directory
 #### Health Endpoint
 **Path:** `/health`<br>
 **Allowed methods:** GET<br>
-**Description:** Returns health status of application<br>
+**Description:** Returns health status of application<br>Used by AWS in order to check if target is healthy.
 
 #### Get all scanned users
 **Path:** `/getAllScannedUsers`<br>
