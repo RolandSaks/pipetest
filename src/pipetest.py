@@ -9,7 +9,6 @@ import datetime
 
 from tinydb import TinyDB, Query, operations
 from flask import Flask, jsonify, sessions, url_for, request, session
-from tinydb.operations import add
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -63,13 +62,13 @@ def get_gists():
         app.logger.info("Found existing session id={}".format(session["session_id"]))
 
         # Get info about the session from DB
-        all_sessions_data = sessions_table.get(Session.session_id.matches(session["session_id"]))
+        session_data = sessions_table.get(Session.session_id.matches(session["session_id"]))
 
         # Diff all gists and last time shown gists
-        new_gists = list(set(all_gists) - set(all_sessions_data["shown_gists"]))
+        new_gists = list(set(all_gists) - set(session_data["shown_gists"]))
 
         # Update session info in DB
-        sessions_table.update({"shown_gists": all_gists}, Session.session["session_id"] == session["session_id"])
+        sessions_table.update({"session_id": session["session_id"], "shown_gists": all_gists}, Session.session_id.matches(session["session_id"]))
         return flask.make_response(jsonify(new_gists), 200)
     else:
         # Generate and save new session_id in session cookie
@@ -108,7 +107,7 @@ def scan_gists():
                     create_new_deal(gist,username,user_gists)
 
     # Run function periodically
-    threading.Timer(int(settings.querying_interval) * 60, scan_gists).start()
+    threading.Timer(int(settings.querying_interval) * 20, scan_gists).start()
 
 
 def register_new_user(username):
