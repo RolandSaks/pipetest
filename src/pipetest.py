@@ -107,7 +107,7 @@ def scan_gists():
                     create_new_deal(gist,username,user_gists)
 
     # Run function periodically
-    threading.Timer(int(settings.querying_interval) * 20, scan_gists).start()
+    threading.Timer(int(settings.querying_interval) * 60, scan_gists).start()
 
 
 def register_new_user(username):
