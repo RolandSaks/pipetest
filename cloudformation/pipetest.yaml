@@ -23,16 +23,6 @@ Parameters:
     Type: String
     Default: 10.10.11.0/24
 
-  PrivateSubnetACIDR:
-    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
-    Type: String
-    Default: 10.10.20.0/24
-
-  PrivateSubnetBCIDR:
-    Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
-    Type: String
-    Default: 10.10.21.0/24
-
   DesiredCapacity:
     Type: Number
     Default: '1'
@@ -112,52 +102,6 @@ Resources:
         - Key: Name
           Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
 
-  PrivateSubnetA:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Sub "${AWS::Region}a"
-      CidrBlock: !Ref PrivateSubnetACIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
-
-  PrivateSubnetB:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Sub "${AWS::Region}b"
-      CidrBlock: !Ref PrivateSubnetBCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
-
-  NatGateway1EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway2EIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway1:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGateway1EIP.AllocationId
-      SubnetId: !Ref PublicSubnetA
-
-  NatGateway2:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGateway2EIP.AllocationId
-      SubnetId: !Ref PublicSubnetB
-
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -186,62 +130,9 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnetB
 
-  PrivateRouteTable1:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Routes (AZ1)
-
-  DefaultPrivateRoute1:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable1
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway1
-
-  PrivateSubnetARouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable1
-      SubnetId: !Ref PrivateSubnetA
-
-  PrivateRouteTable2:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Routes (AZ2)
-
-  DefaultPrivateRoute2:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable2
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway2
-
-  PrivateSubnetBRouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable2
-      SubnetId: !Ref PrivateSubnetB
-
   # ECS
   ECSCluster:
     Type: AWS::ECS::Cluster
-
-  EcsSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: ECS Security Group
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: -1
-          FromPort: '0'
-          ToPort: '65535'
-          CidrIp: !Ref VpcCIDR
 
   ECSTaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -346,7 +237,7 @@ Resources:
       FileSystemId: !Ref EFS
       SecurityGroups:
         - !Ref EFSSecurityGroup
-      SubnetId: !Ref PrivateSubnetA
+      SubnetId: !Ref PublicSubnetA
 
   EFSMountTargetB:
     Type: AWS::EFS::MountTarget
@@ -354,9 +245,20 @@ Resources:
       FileSystemId: !Ref EFS
       SecurityGroups:
         - !Ref EFSSecurityGroup
-      SubnetId: !Ref PrivateSubnetB
+      SubnetId: !Ref PublicSubnetB
 
   # Application Load Balancer
+  ElbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EC2 Security Group
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
   ECSALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -369,7 +271,7 @@ Resources:
         - !Ref PublicSubnetA
         - !Ref PublicSubnetB
       SecurityGroups:
-        - !Ref EcsSecurityGroup
+        - !Ref ElbSecurityGroup
 
   ALBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -411,12 +313,23 @@ Resources:
       VpcId: !Ref VPC
 
   # EC2 AS
+  Ec2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EC2 Security Group
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          FromPort: '0'
+          ToPort: '65535'
+          CidrIp: !Ref VpcCIDR
+
   EC2AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
       VPCZoneIdentifier:
-        - !Ref PrivateSubnetA
-        - !Ref PrivateSubnetB
+        - !Ref PublicSubnetA
+        - !Ref PublicSubnetB
       LaunchConfigurationName: !Ref EC2LauncConfiguration
       MinSize: 1
       MaxSize: !Ref MaxSize
@@ -430,7 +343,7 @@ Resources:
     Properties:
       ImageId: !FindInMap [AWSRegionToAMI, !Ref AWS::Region, AMIID]
       SecurityGroups:
-        - !Ref EcsSecurityGroup
+        - !Ref Ec2SecurityGroup
       InstanceType: t2.micro
       IamInstanceProfile: !Ref EC2InstanceProfile
       UserData:
