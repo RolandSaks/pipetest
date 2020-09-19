@@ -133,4 +133,4 @@ db/
 db.json
 
 # Pycharm
-.idea
+.idea/
