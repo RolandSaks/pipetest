@@ -28,11 +28,6 @@ Parameters:
     Default: '1'
     Description: Number of instances to launch in your ECS cluster.
 
-  MaxSize:
-    Type: Number
-    Default: '1'
-    Description: Maximum number of instances that can be launched in your ECS cluster.
-
   PipetestQueriedUseres:
     Description: Comma separated list of users to query from GitHub
     Type: String
@@ -332,7 +327,7 @@ Resources:
         - !Ref PublicSubnetB
       LaunchConfigurationName: !Ref EC2LauncConfiguration
       MinSize: 1
-      MaxSize: !Ref MaxSize
+      MaxSize: !Ref DesiredCapacity
       DesiredCapacity: !Ref DesiredCapacity
     UpdatePolicy:
       AutoScalingReplacingUpdate:
