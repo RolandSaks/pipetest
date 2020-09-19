@@ -28,6 +28,11 @@ Parameters:
     Default: '1'
     Description: Number of instances to launch in your ECS cluster.
 
+  PipetestDockerImage:
+    Description: Docker iamge for pieptest app
+    Type: String
+    Default: antomer/pipetest
+
   PipetestQueriedUseres:
     Description: Comma separated list of users to query from GitHub
     Type: String
@@ -140,7 +145,7 @@ Resources:
         - Name: pipetest
           MemoryReservation: 100
           Hostname: pipetest
-          Image: antomer/pipetest
+          Image: !Ref PipetestDockerImage
           MountPoints:
             - ContainerPath: /db
               SourceVolume: pipetest_efs
