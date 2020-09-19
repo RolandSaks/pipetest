@@ -64,8 +64,12 @@ Run Run docker image. Execute command from projects root directory
 **Description:** Returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
 
 ## 7. Provisioning in the AWS
-
 Application can be provisioned into the AWS cloud using AWS Cloudformation template located in `cloudformation/pipetest.yaml`. <br>
+
+### 7.1 AWS Setup diagram
+![AWS Diagram](AWS_diagram.png)
+
+### 7.2 CF template parameters
 Template requires following parameters as an input:
  * **EnvironmentName (optional)**
     * An environment name that is prefixed to resource names (Default value=development)
@@ -85,7 +89,12 @@ Template requires following parameters as an input:
     * Company name in Pipedrive CRM
  * **PipetestPipedriveApiKey (mandatory)**
     * API key for Pipedrive API, should match with PipetestPipedriveCompanyName
- 
+    
+### 7.3 CF stack outputs
+After stack is provisioned in AWS, it will have load balancer's public DNS name in Stack outputs. application will be available via this DNS.<br>
+(Example http://ecsalb-929325745.eu-west-1.elb.amazonaws.com)
+
+### Provisioned resources
 Template provisions following AWS resources. All resources are eligible for Free tier:
  * AWS::AutoScaling::AutoScalingGroup
  * AWS::AutoScaling::LaunchConfiguration
@@ -111,9 +120,6 @@ Template provisions following AWS resources. All resources are eligible for Free
  * AWS::ElasticLoadBalancingV2::TargetGroup
  * AWS::IAM::InstanceProfile
  * AWS::IAM::Role
- 
-### AWS Setup diagram
-![AWS Diagram](AWS_diagram.png)
 
 ## 8. Possible improvements
 * Remove expired sessions from DB
