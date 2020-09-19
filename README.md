@@ -26,15 +26,12 @@ In order to avoid data duplication in Pipedrive CRM (ex multiple organizations f
 ### 4.1 DB storage in AWS
 In AWS setup Amazon Elastic File System is used to store Tiny DB data.
 
-## 5. Run application
+## 5. Run application locally
 ### 5.1 Get docker image image
-* Build locally, see step "Build docker image".  
-* Pull from remote repo
-
-    
-    docker pull antomer/pipetest
-
-Run Run docker image. Execute command from projects root directory 
+1.Build iamge locally/ see step "Build docker image" **OR** Pull latest image from public remote repository 
+   
+    docker pull antomer/pipetest   
+2.Run docker image. Execute command from projects root directory 
 
     docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it antomer/pipetest
 
@@ -61,7 +58,7 @@ Run Run docker image. Execute command from projects root directory
 #### 6.4 Get new gists
 **Path:** `/getGists`<br>
 **Allowed methods:** GET<br>
-**Description:** Returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in response.<br>
+**Description:** Returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in the response.<br>
 
 ## 7. Provisioning in the AWS
 Application can be provisioned into the AWS cloud using AWS Cloudformation template located in `cloudformation/pipetest.yaml`. <br>
@@ -125,4 +122,5 @@ Template provisions following AWS resources. All resources are eligible for Free
 * Remove expired sessions from DB
 * Check if an organization or deal in Pipedrive exists before creating.
 * HTTPS
+* Add tests
 * And many more..
