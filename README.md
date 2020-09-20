@@ -48,17 +48,17 @@ In AWS setup Amazon Elastic File System is used to store Tiny DB data.
 ### 6.2 Get all scanned users
 **Path:** `/getAllScannedUsers`<br>
 **Allowed methods:** GET<br>
-**Description:** Returns all users ever scanned by the app.<br>
+**Description:** Returns list of Github usernames for all users ever scanned by the app.<br>
 
 ### 6.3 Get currently scanned users
 **Path:** `/getCurrentlyScannedUsers`<br>
 **Allowed methods:** GET<br>
-**Description:** Returns list of users currently being scanned. May differ from `/getAllScannedUsers` response if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
+**Description:** Returns list of Github usernames for users currently being scanned. May differ from `/getAllScannedUsers` response if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
 ### 6.4 Get new gists
 **Path:** `/getGists`<br>
 **Allowed methods:** GET<br>
-**Description:** Returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in the response.<br>
+**Description:** Returns list of GitHub Gist IDs for new Gists for particular session. If session cookie is expired, or not present, then first response will have all gists ever fetched by the application.<br>
 
 ## 7. Provisioning in the AWS
 Application can be provisioned into the AWS cloud using AWS Cloudformation template located in `cloudformation/pipetest.yaml`. <br>
