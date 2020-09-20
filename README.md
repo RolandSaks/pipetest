@@ -27,7 +27,7 @@ In order to avoid data duplication in Pipedrive CRM (ex multiple organizations f
 In AWS setup Amazon Elastic File System is used to store Tiny DB data.
 
 ## 5. Run application locally
-### 5.1 Get docker image image
+### 5.1 Docker image
 1.Build iamge locally/ see step "Build docker image" **OR** Pull latest image from public remote repository 
    
     docker pull antomer/pipetest   
@@ -35,27 +35,27 @@ In AWS setup Amazon Elastic File System is used to store Tiny DB data.
 
     docker run -v ${PWD}:/db PIPETEST_PIEPEDRIVE_COMPANY_NAME=<comapny_name> -e PIPETEST_PIEPEDRIVE_API_KEY=<api_key> -p 8080:8080 -it antomer/pipetest
 
-### Access locally run application
+### 5.2 Access locally run application
     
     curl localhost:8080/getAllScannedUsers
     
 ## 6. HTTP endpoints
-#### 6.1 Health Endpoint
+### 6.1 Health Endpoint
 **Path:** `/health`<br>
 **Allowed methods:** GET<br>
 **Description:** Returns health status of application<br>Used by AWS in order to check if target is healthy.
 
-#### 6.2 Get all scanned users
+### 6.2 Get all scanned users
 **Path:** `/getAllScannedUsers`<br>
 **Allowed methods:** GET<br>
 **Description:** Returns all users ever scanned by the app.<br>
 
-#### 6.3 Get currently scanned users
+### 6.3 Get currently scanned users
 **Path:** `/getCurrentlyScannedUsers`<br>
 **Allowed methods:** GET<br>
 **Description:** Returns list of users currently being scanned. May differ from `/getAllScannedUsers` response if `PIPETEST_QUERIED_USERS` configuration was changed.<br>
 
-#### 6.4 Get new gists
+### 6.4 Get new gists
 **Path:** `/getGists`<br>
 **Allowed methods:** GET<br>
 **Description:** Returns list of new gists for particular session. If session cookie is expired, or not present, then all gists ever fetched by the application will be in the response.<br>
@@ -121,6 +121,6 @@ Template provisions following AWS resources. All resources are eligible for Free
 ## 8. Possible improvements
 * Remove expired sessions from DB
 * Check if an organization or deal in Pipedrive exists before creating.
-* HTTPS
+* Add HTTPS
 * Add tests
 * And many more..
