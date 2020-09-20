@@ -12,9 +12,9 @@ Application configuration is done via environment variables.
 ### 3.1 Mandatory environment variable 
 * `PIPETEST_PIEPEDRIVE_COMPANY_NAME` - Comapny name in Pipedrive. Default value is set to **antonsawesomecompany**
 * `PIPETEST_PIEPEDRIVE_API_KEY` - API key for Pipedrive API (should match `PIPETEST_PIEPEDRIVE_COMPANY_NAME`) 
+* `PIPETEST_QUERIED_USERS` - Comma separated list of GitHub users which will be queried by the app. (ex `PIPETEST_QUERIED_USERS=Kiedis,Flea,Smith,Frusciante`) <br>Default value set to **antomer**
 
 ### 3.2 Optional environment variables (have default value)
-* `PIPETEST_QUERIED_USERS` - Comma separated list of GitHub users which will be queried by the app. (ex `PIPETEST_QUERIED_USERS=Kiedis,Flea,Smith,Frusciante`) <br>Default value set to **antomer**
 * `PIPETEST_QUERYING_INTERVAL` - Interval in *minutes* for how often user gists will be fetched from the GitHub. <br>Default value set to **30**
 <em><br><br>!NB As GitHub API has a limit for unauthorized requests. while configuring application it should be considered that amount of queried users * 60 / querying interval should not be more than 60, otherwise, requests will start to fail </em>
 
